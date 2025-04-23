@@ -14,7 +14,7 @@ function readAndParseSoftWireEmails() {
         let secondPart = firstPart.split('@')[1];
 
         if (groupedByDomain[secondPart]) {
-            groupedByDomain[secondPart] += 1;
+            groupedByDomain[secondPart]++;
         } else {
             groupedByDomain[secondPart] = 1;
         }
