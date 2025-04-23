@@ -1,2 +1,3 @@
-//
-1) Download file in current working directory
+To run the file use the following command
+
+node emailExtraction.js
