@@ -1,23 +1,32 @@
+const fs = require('fs')
+const fileContents = fs.readFileSync('Emails.txt').toString();
 
-const { open } = require('node:fs/promises');
-const emailRegex = /(.+)@softwire\.com$/;
+const softwireEmailRegex = /@softwire\.com\s/g;
+const allEmailRegex =/\S+@\S+\.\S+/g;
+
+const softwireMatches = fileContents.match(softwireEmailRegex)
+const allEmailMatches = fileContents.match(allEmailRegex);
+
+
+let groupedByDomain = {};
+
 function readAndParseSoftWireEmails() {
     let counter = 0;
-    (async () => {
-        const file = await open('Emails.txt');
-        for await (const line of file.readLines()) {
-            let words = line.split(' ');
-            for (let i = 0; i < words.length; i++) {
-                if ((words[i].match(emailRegex))) {
-                    counter++;
-                }
+   
+    for (let i=0; i<allEmailMatches.length; i++) {
+        let firstPart = allEmailMatches[i];        
+        let secondPart = firstPart.split('@')[1];       
+
+        for (let j =i+1; j<allEmailMatches.length; j++) {
+            if(allEmailMatches[j].includes(secondPart)) {
+                counter ++;
+                groupedByDomain[secondPart] = counter;
             }
+            
         }
-        console.log('The number of emails with @softwire.com domain is ' + counter);
+        counter=0;
     }
-    )
-        ();
+    console.log(groupedByDomain);
 }
 
 readAndParseSoftWireEmails();
-
